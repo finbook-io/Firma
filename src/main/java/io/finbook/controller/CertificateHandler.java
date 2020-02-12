@@ -1,11 +1,15 @@
 package io.finbook.controller;
 
 import io.finbook.model.FirmaData;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.Security;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
 
 public class CertificateHandler {
 
@@ -24,6 +28,12 @@ public class CertificateHandler {
     }
 
     public CertificateHandler(FirmaData firmaData) {
+        Security.setProperty("crypto.policy", "unlimited");
+        try {
+            javax.crypto.Cipher.getMaxAllowedKeyLength("AES");
+        } catch (NoSuchAlgorithmException ignored) {}
+        Security.addProvider(new BouncyCastleProvider());
+
         this.firmaData = firmaData;
     }
 
@@ -48,4 +58,20 @@ public class CertificateHandler {
             return null;
         }
     }
+
+    public X509Certificate getCertificate() throws InvalidCertificate {
+        try {
+            CertificateFactory certFactory = CertificateFactory.getInstance("X.509", "BC");
+
+            try {
+                return (X509Certificate) certFactory.generateCertificate(new FileInputStream(firmaData.getCertificatePath()));
+            } catch (FileNotFoundException | CertificateException e) {
+                throw new InvalidCertificate();
+            }
+        } catch (NoSuchProviderException | CertificateException e) {
+            return null;
+        }
+    }
+
+    public static class InvalidCertificate extends Exception {}
 }

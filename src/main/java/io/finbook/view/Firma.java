@@ -7,6 +7,7 @@ import io.finbook.model.FirmaData;
 import javax.swing.*;
 import java.awt.*;
 import java.security.PrivateKey;
+import java.security.cert.X509Certificate;
 
 public class Firma extends JFrame {
 
@@ -19,7 +20,15 @@ public class Firma extends JFrame {
 
         CertificateHandler ch = new CertificateHandler(firmaData);
         ch.setCertificatePath();
-        PrivateKeyHandler pkh = new PrivateKeyHandler(firmaData, null);
+        X509Certificate certificate = null;
+        try {
+            certificate = ch.getCertificate();
+        } catch (CertificateHandler.InvalidCertificate invalidCertificate) {
+            System.out.println("Certificado inválido");
+            System.out.println(1);
+        }
+
+        PrivateKeyHandler pkh = new PrivateKeyHandler(firmaData, certificate);
         pkh.setPrivateKeyPath();
 
         setContentPane(getPaneBuilded());
@@ -39,8 +48,8 @@ public class Firma extends JFrame {
             System.out.println("Contraseña inválida");
         } catch (PrivateKeyHandler.InvalidCertificate invalidCertificate) {
             System.out.println("Certificado inválido");
+            System.out.println(2);
         }
-        System.out.println(pk);
     }
 
     private Container getPaneBuilded() {

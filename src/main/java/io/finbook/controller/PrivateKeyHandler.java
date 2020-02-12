@@ -1,6 +1,7 @@
 package io.finbook.controller;
 
 import io.finbook.model.FirmaData;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import java.io.*;
 import java.security.*;
@@ -25,6 +26,12 @@ public class PrivateKeyHandler {
     }
 
     public PrivateKeyHandler(FirmaData firmaData, X509Certificate certificate) {
+        Security.setProperty("crypto.policy", "unlimited");
+        try {
+            javax.crypto.Cipher.getMaxAllowedKeyLength("AES");
+        } catch (NoSuchAlgorithmException ignored) {}
+        Security.addProvider(new BouncyCastleProvider());
+
         this.firmaData = firmaData;
         this.certificate = certificate;
     }

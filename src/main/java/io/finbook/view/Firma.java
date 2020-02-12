@@ -1,15 +1,23 @@
 package io.finbook.view;
 
+import io.finbook.controller.PrivateKeyHandler;
+import io.finbook.model.FirmaData;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class Firma extends JFrame {
 
     private String textToSign;
+    private FirmaData firmaData;
 
     public Firma(String textToSign) {
         this.textToSign = textToSign;
-        
+        this.firmaData = new FirmaData();
+
+        PrivateKeyHandler pkh = new PrivateKeyHandler(firmaData);
+        pkh.setPrivateKeyPath();
+
         setContentPane(getPaneBuilded());
         pack();
         setResizable(false);
@@ -28,7 +36,7 @@ public class Firma extends JFrame {
         pane.add(new JLabel("Texto a firmar"));
         pane.add(new JLabel(textToSign));
         pane.add(new JLabel("Directorio de la Clave Privada"));
-        pane.add(new JLabel("Directorio de ejemplo"));
+        pane.add(new JLabel(firmaData.getPrivateKeyPath()));
         pane.add(new JLabel("Directorio del Certificado"));
         pane.add(new JLabel("Directorio de ejemplo"));
 
@@ -36,6 +44,6 @@ public class Firma extends JFrame {
     }
 
     public static void main(String[] args) {
-        new Firma("Texto a firmar");
+        new Firma("Texto de ejemplo");
     }
 }

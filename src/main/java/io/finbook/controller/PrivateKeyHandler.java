@@ -1,6 +1,7 @@
 package io.finbook.controller;
 
 import io.finbook.model.FirmaData;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import java.io.*;
 import java.security.*;
@@ -25,6 +26,12 @@ public class PrivateKeyHandler {
     }
 
     public PrivateKeyHandler(FirmaData firmaData, X509Certificate certificate) {
+        Security.setProperty("crypto.policy", "unlimited");
+        try {
+            javax.crypto.Cipher.getMaxAllowedKeyLength("AES");
+        } catch (NoSuchAlgorithmException ignored) {}
+        Security.addProvider(new BouncyCastleProvider());
+
         this.firmaData = firmaData;
         this.certificate = certificate;
     }
@@ -51,7 +58,7 @@ public class PrivateKeyHandler {
         }
     }
 
-    public PrivateKey getPrivateKey(String password) throws InvalidPassword {
+    public PrivateKey getPrivateKey(String password) throws InvalidPassword, InvalidCertificate {
         try {
             KeyStore keystore = KeyStore.getInstance("PKCS12");
             try {
@@ -60,13 +67,16 @@ public class PrivateKeyHandler {
                 throw new InvalidPassword();
             }
 
-            return (PrivateKey) keystore.getKey(keystore.getCertificateAlias(certificate), password.toCharArray());
+            try {
+                return (PrivateKey) keystore.getKey(keystore.getCertificateAlias(certificate), password.toCharArray());
+            } catch (NullPointerException e) {
+                throw new InvalidCertificate();
+            }
         } catch (KeyStoreException | UnrecoverableKeyException | NoSuchAlgorithmException | CertificateException e) {
             return null;
         }
     }
 
-    public class InvalidPassword extends Exception {
-
-    }
+    public static class InvalidPassword extends Exception {}
+    public static class InvalidCertificate extends Exception {}
 }

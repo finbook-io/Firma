@@ -5,6 +5,7 @@ import io.finbook.model.FirmaData;
 
 import javax.swing.*;
 import java.awt.*;
+import java.security.PrivateKey;
 
 public class Firma extends JFrame {
 
@@ -15,7 +16,7 @@ public class Firma extends JFrame {
         this.textToSign = textToSign;
         this.firmaData = new FirmaData();
 
-        PrivateKeyHandler pkh = new PrivateKeyHandler(firmaData);
+        PrivateKeyHandler pkh = new PrivateKeyHandler(firmaData, null);
         pkh.setPrivateKeyPath();
 
         setContentPane(getPaneBuilded());
@@ -27,6 +28,14 @@ public class Firma extends JFrame {
 
         String password = JOptionPane.showInputDialog(this, "Introduzca su contraseña de la clave privada", "Contraseña", JOptionPane.PLAIN_MESSAGE);
         System.out.println(password);
+
+        PrivateKey pk = null;
+        try {
+            pk = pkh.getPrivateKey(password);
+        } catch (PrivateKeyHandler.InvalidPassword invalidPassword) {
+            System.out.println("Contraseña inválida");
+        }
+        System.out.println(pk);
     }
 
     private Container getPaneBuilded() {

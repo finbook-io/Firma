@@ -51,7 +51,7 @@ public class PrivateKeyHandler {
         }
     }
 
-    public PrivateKey getPrivateKey(String password) throws InvalidPassword {
+    public PrivateKey getPrivateKey(String password) throws InvalidPassword, InvalidCertificate {
         try {
             KeyStore keystore = KeyStore.getInstance("PKCS12");
             try {
@@ -60,13 +60,16 @@ public class PrivateKeyHandler {
                 throw new InvalidPassword();
             }
 
-            return (PrivateKey) keystore.getKey(keystore.getCertificateAlias(certificate), password.toCharArray());
+            try {
+                return (PrivateKey) keystore.getKey(keystore.getCertificateAlias(certificate), password.toCharArray());
+            } catch (NullPointerException e) {
+                throw new InvalidCertificate();
+            }
         } catch (KeyStoreException | UnrecoverableKeyException | NoSuchAlgorithmException | CertificateException e) {
             return null;
         }
     }
 
-    public class InvalidPassword extends Exception {
-
-    }
+    public static class InvalidPassword extends Exception {}
+    public static class InvalidCertificate extends Exception {}
 }

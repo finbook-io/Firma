@@ -1,6 +1,7 @@
 package io.finbook.view;
 
 import io.finbook.controller.CertificateHandler;
+import io.finbook.controller.OutputHandler;
 import io.finbook.controller.PrivateKeyHandler;
 import io.finbook.controller.Signer;
 import io.finbook.model.FirmaData;
@@ -56,6 +57,9 @@ public class Firma extends JFrame {
         SignData signData = new SignData(pk, certificate, textToSign);
         Signer signer = new Signer(signData);
         signer.sign();
+
+        OutputHandler outputHandler = new OutputHandler(signData);
+        outputHandler.saveText();
     }
 
     private Container getPaneBuilded() {

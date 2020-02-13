@@ -15,16 +15,16 @@ public class PrivateKeyHandler {
     private SignData signData;
     private X509Certificate certificate;
     private final static String PRIVATE_KEY_PATH = "private_key_path.txt";
-    private final static File privateKeyData;
+    private final static File privateKeyPathFile;
 
     static {
-        privateKeyData = new File(PRIVATE_KEY_PATH);
-        createFile();
+        privateKeyPathFile = new File(PRIVATE_KEY_PATH);
+        create(privateKeyPathFile);
     }
 
-    private static void createFile() {
+    private static void create(File file) {
         try {
-            privateKeyData.createNewFile();
+            file.createNewFile();
         } catch (IOException ignored) {}
     }
 
@@ -56,7 +56,7 @@ public class PrivateKeyHandler {
 
     private BufferedReader fromBufferedReader() {
         try {
-            return new BufferedReader(new FileReader(privateKeyData));
+            return new BufferedReader(new FileReader(privateKeyPathFile));
         } catch (IOException e) {
             return null;
         }

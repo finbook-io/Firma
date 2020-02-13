@@ -17,16 +17,16 @@ public class CertificateHandler {
     private FirmaData firmaData;
     private SignData signData;
     private final static String CERTIFICATE_PATH = "certificate_path.txt";
-    private final static File certificateData;
+    private final static File certificatePathFile;
 
     static {
-        certificateData = new File(CERTIFICATE_PATH);
-        createFile();
+        certificatePathFile = new File(CERTIFICATE_PATH);
+        create(certificatePathFile);
     }
 
-    private static void createFile() {
+    private static void create(File file) {
         try {
-            certificateData.createNewFile();
+            file.createNewFile();
         } catch (IOException ignored) {}
     }
 
@@ -57,7 +57,7 @@ public class CertificateHandler {
 
     private BufferedReader fromBufferedReader() {
         try {
-            return new BufferedReader(new FileReader(certificateData));
+            return new BufferedReader(new FileReader(certificatePathFile));
         } catch (IOException e) {
             return null;
         }

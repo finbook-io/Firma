@@ -8,16 +8,16 @@ public class OutputHandler {
 
     private final SignData signData;
     private final static String OUTPUT_PATH = "text_signed.txt";
-    private final static File outputData;
+    private final static File outputFile;
 
     static {
-        outputData = new File(OUTPUT_PATH);
-        createFile();
+        outputFile = new File(OUTPUT_PATH);
+        create(outputFile);
     }
 
-    private static void createFile() {
+    private static void create(File file) {
         try {
-            outputData.createNewFile();
+            file.createNewFile();
         } catch (IOException ignored) {}
     }
 
@@ -26,8 +26,8 @@ public class OutputHandler {
     }
 
     public void saveText() {
-        deleteTheContentOf(outputData);
-        writeSignIn(outputData);
+        deleteTheContentOf(outputFile);
+        writeSignIn(outputFile);
     }
 
     private void deleteTheContentOf(File outputData) {

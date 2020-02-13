@@ -28,7 +28,9 @@ public class CertificateHandler extends FirmaHandler {
         Security.setProperty("crypto.policy", "unlimited");
         try {
             javax.crypto.Cipher.getMaxAllowedKeyLength("AES");
-        } catch (NoSuchAlgorithmException ignored) {}
+        } catch (NoSuchAlgorithmException ignored) {
+            ignored.printStackTrace();
+        }
         Security.addProvider(new BouncyCastleProvider());
 
         this.firmaData = firmaData;
@@ -44,7 +46,9 @@ public class CertificateHandler extends FirmaHandler {
 
         try {
             certificatePath = fromBufferedReader().readLine();
-        } catch (IOException ignored) {}
+        } catch (IOException ignored) {
+            ignored.printStackTrace();
+        }
 
         return certificatePath;
     }
@@ -53,19 +57,26 @@ public class CertificateHandler extends FirmaHandler {
         try {
             return new BufferedReader(new FileReader(certificatePathFile));
         } catch (IOException e) {
+            e.printStackTrace();
             return null;
         }
     }
 
-    public void getCertificate() throws InvalidCertificate {
+    public void getCertificate() throws InvalidCertificate, FileNotFoundException {
         try {
             CertificateFactory certFactory = CertificateFactory.getInstance("X.509", "BC");
 
             try {
                 signData.setCertificate((X509Certificate) certFactory.generateCertificate(new FileInputStream(firmaData.getCertificatePath())));
-            } catch (FileNotFoundException | CertificateException e) {
+            } catch (FileNotFoundException | NullPointerException e) {
+                e.printStackTrace();
+                throw new FileNotFoundException();
+            } catch (CertificateException e) {
+                e.printStackTrace();
                 throw new InvalidCertificate();
             }
-        } catch (NoSuchProviderException | CertificateException ignored) {}
+        } catch (NoSuchProviderException | CertificateException ignored) {
+            ignored.printStackTrace();
+        }
     }
 }

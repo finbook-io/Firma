@@ -26,7 +26,9 @@ public class PrivateKeyHandler extends FirmaHandler {
         Security.setProperty("crypto.policy", "unlimited");
         try {
             javax.crypto.Cipher.getMaxAllowedKeyLength("AES");
-        } catch (NoSuchAlgorithmException ignored) {}
+        } catch (NoSuchAlgorithmException ignored) {
+            ignored.printStackTrace();
+        }
         Security.addProvider(new BouncyCastleProvider());
 
         this.firmaData = firmaData;
@@ -43,7 +45,9 @@ public class PrivateKeyHandler extends FirmaHandler {
 
         try {
             privateKeyPath = fromBufferedReader().readLine();
-        } catch (IOException ignored) {}
+        } catch (IOException ignored) {
+            ignored.printStackTrace();
+        }
 
         return privateKeyPath;
     }
@@ -52,24 +56,32 @@ public class PrivateKeyHandler extends FirmaHandler {
         try {
             return new BufferedReader(new FileReader(privateKeyPathFile));
         } catch (IOException e) {
+            e.printStackTrace();
             return null;
         }
     }
 
-    public void getPrivateKey(String password) throws InvalidPassword, InvalidCertificate {
+    public void getPrivateKey(String password) throws InvalidPassword, InvalidCertificate, FileNotFoundException {
         try {
             KeyStore keystore = KeyStore.getInstance("PKCS12");
             try {
                 keystore.load(new FileInputStream(firmaData.getPrivateKeyPath()), password.toCharArray());
+            } catch (FileNotFoundException | NullPointerException e) {
+                e.printStackTrace();
+                throw new FileNotFoundException();
             } catch (IOException e) {
+                e.printStackTrace();
                 throw new InvalidPassword();
             }
 
             try {
                 signData.setPrivateKey((PrivateKey) keystore.getKey(keystore.getCertificateAlias(certificate), password.toCharArray()));
             } catch (NullPointerException e) {
+                e.printStackTrace();
                 throw new InvalidCertificate();
             }
-        } catch (KeyStoreException | UnrecoverableKeyException | NoSuchAlgorithmException | CertificateException ignored) {}
+        } catch (KeyStoreException | UnrecoverableKeyException | NoSuchAlgorithmException | CertificateException ignored) {
+            ignored.printStackTrace();
+        }
     }
 }

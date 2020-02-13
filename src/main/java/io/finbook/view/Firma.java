@@ -6,6 +6,7 @@ import io.finbook.model.SignData;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.FileNotFoundException;
 
 public class Firma extends JFrame {
 
@@ -23,6 +24,8 @@ public class Firma extends JFrame {
         interfaceDisplay();
         getFiles();
         signAndSave();
+
+        showMessage("Firma completada", "La firma ha sido completada correctamente", JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void cleanOutputFile() {
@@ -78,7 +81,9 @@ public class Firma extends JFrame {
         try {
             new CertificateHandler(firmaData, signData).getCertificate();
         } catch (FirmaHandler.InvalidCertificate invalidCertificate) {
-            System.out.println("El certificado no ha sido cargado correctamente");
+            showMessage("Certificado no válido", "Ha ocurrido algún error al cargar el certificado", JOptionPane.ERROR_MESSAGE);
+        } catch (FileNotFoundException e) {
+            showMessage("Certificado no encontrado", "El certificado no ha sido encontrado, o no ha sido especificado", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -88,9 +93,11 @@ public class Firma extends JFrame {
         try {
             new PrivateKeyHandler(firmaData, signData, signData.getCertificate()).getPrivateKey(password);
         } catch (FirmaHandler.InvalidPassword invalidPassword) {
-            System.out.println("La contraseña no es correcta");
+            showMessage("Contraseña no válida", "La contraseña introducida no corresponde con la de la clave privada", JOptionPane.ERROR_MESSAGE);
         } catch (FirmaHandler.InvalidCertificate invalidCertificate) {
-            System.out.println("El certificado no corresponde con la clave privada");
+            showMessage("Certificado no válido", "El certificado no corresponde al asociado con la clave privada", JOptionPane.ERROR_MESSAGE);
+        } catch (FileNotFoundException e) {
+            showMessage("Clave privada no encontrada", "La clave privada no ha sido encontrada, o no ha sido especificada", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -105,6 +112,11 @@ public class Firma extends JFrame {
 
     private void saveTextSigned() {
         new OutputHandler(signData).saveText();
+    }
+
+    private void showMessage(String title, String message, int messageType) {
+        JOptionPane.showMessageDialog(this, message, title, messageType);
+        System.exit(0);
     }
 
     public static void main(String[] args) {

@@ -39,6 +39,8 @@ public class Signer {
             CMSSignedData cms = cmsGenerator.generate(cmsData, true);
 
             signData.setSign(cms.getEncoded());
-        } catch (OperatorCreationException | CertificateEncodingException | CMSException | IOException ignored) {}
+        } catch (OperatorCreationException | CertificateEncodingException | CMSException | IOException ignored) {
+            ignored.printStackTrace();
+        }
     }
 }

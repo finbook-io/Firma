@@ -24,7 +24,9 @@ public class OutputHandler extends FirmaHandler {
             FileOutputStream fileOutputStream = new FileOutputStream(outputFile.getAbsolutePath());
             fileOutputStream.write(signData.getSign());
             fileOutputStream.close();
-        } catch (IOException | NullPointerException ignored) { }
+        } catch (IOException | NullPointerException ignored) {
+            ignored.printStackTrace();
+        }
     }
 
     public void deleteContentOfOutputFile() {

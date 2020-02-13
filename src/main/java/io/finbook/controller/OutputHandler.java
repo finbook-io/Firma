@@ -4,21 +4,15 @@ import io.finbook.model.SignData;
 
 import java.io.*;
 
-public class OutputHandler {
+public class OutputHandler extends FirmaHandler {
 
     private final SignData signData;
     private final static String OUTPUT_PATH = "text_signed.txt";
-    private static File outputData;
+    private final static File outputFile;
 
     static {
-        outputData = new File(OUTPUT_PATH);
-        createFile();
-    }
-
-    private static void createFile() {
-        try {
-            outputData.createNewFile();
-        } catch (IOException ignored) {}
+        outputFile = new File(OUTPUT_PATH);
+        create(outputFile);
     }
 
     public OutputHandler(SignData signData) {
@@ -26,8 +20,8 @@ public class OutputHandler {
     }
 
     public void saveText() {
-        deleteTheContentOf(outputData);
-        writeSignIn(outputData);
+        deleteTheContentOf(outputFile);
+        writeSignIn(outputFile);
     }
 
     private void deleteTheContentOf(File outputData) {

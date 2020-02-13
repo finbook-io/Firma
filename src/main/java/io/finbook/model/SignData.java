@@ -5,14 +5,12 @@ import java.security.cert.X509Certificate;
 
 public class SignData {
 
-    private final PrivateKey privateKey;
-    private final X509Certificate certificate;
+    private PrivateKey privateKey;
+    private X509Certificate certificate;
     private final String textToSign;
     private byte[] sign;
 
-    public SignData(PrivateKey privateKey, X509Certificate certificate, String textToSign) {
-        this.privateKey = privateKey;
-        this.certificate = certificate;
+    public SignData(String textToSign) {
         this.textToSign = textToSign;
     }
 
@@ -20,8 +18,16 @@ public class SignData {
         return privateKey;
     }
 
+    public void setPrivateKey(PrivateKey privateKey) {
+        this.privateKey = privateKey;
+    }
+
     public X509Certificate getCertificate() {
         return certificate;
+    }
+
+    public void setCertificate(X509Certificate certificate) {
+        this.certificate = certificate;
     }
 
     public String getTextToSign() {

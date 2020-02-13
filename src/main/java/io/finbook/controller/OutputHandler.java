@@ -20,25 +20,14 @@ public class OutputHandler extends FirmaHandler {
     }
 
     public void saveText() {
-        deleteTheContentOf(outputFile);
-        writeSignIn(outputFile);
-    }
-
-    private void deleteTheContentOf(File outputData) {
         try {
-            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(outputData));
-            bufferedWriter.write("");
-            bufferedWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void writeSignIn(File outputData) {
-        try {
-            FileOutputStream fileOutputStream = new FileOutputStream(outputData.getAbsolutePath());
+            FileOutputStream fileOutputStream = new FileOutputStream(outputFile.getAbsolutePath());
             fileOutputStream.write(signData.getSign());
             fileOutputStream.close();
-        } catch (IOException ignored) { }
+        } catch (IOException | NullPointerException ignored) { }
+    }
+
+    public void deleteContentOfOutputFile() {
+        deleteTheContentOf(outputFile);
     }
 }

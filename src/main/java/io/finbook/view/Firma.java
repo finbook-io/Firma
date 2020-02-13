@@ -11,51 +11,43 @@ public class Firma extends JFrame {
 
     private String textToSign;
     private FirmaData firmaData;
+    private SignData signData;
 
     public Firma(String textToSign) {
         this.textToSign = textToSign;
         this.firmaData = new FirmaData();
-        SignData signData = new SignData(textToSign);
+        this.signData = new SignData(textToSign);
 
-        CertificateHandler ch = new CertificateHandler(firmaData, signData);
-        ch.setCertificatePath();
-        try {
-            ch.getCertificate();
-        } catch (FirmaHandler.InvalidCertificate invalidCertificate) {
-            System.out.println("Certificado inválido");
-            System.out.println(1);
-        }
-
-        PrivateKeyHandler pkh = new PrivateKeyHandler(firmaData, signData, signData.getCertificate());
-        pkh.setPrivateKeyPath();
-
-        setContentPane(getPaneBuilded());
-        pack();
-        setResizable(false);
-        setVisible(true);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-
-        String password = JOptionPane.showInputDialog(this, "Introduzca su contraseña de la clave privada", "Contraseña", JOptionPane.PLAIN_MESSAGE);
-        System.out.println(password);
-
-        try {
-            pkh.getPrivateKey(password);
-        } catch (FirmaHandler.InvalidPassword invalidPassword) {
-            System.out.println("Contraseña inválida");
-        } catch (FirmaHandler.InvalidCertificate invalidCertificate) {
-            System.out.println("Certificado inválido");
-            System.out.println(2);
-        }
-
-        Signer signer = new Signer(signData);
-        signer.sign();
-
-        OutputHandler outputHandler = new OutputHandler(signData);
-        outputHandler.saveText();
+        cleanOutputFile();
+        setPaths();
+        interfaceDisplay();
+        getFiles();
+        signAndSave();
     }
 
-    private Container getPaneBuilded() {
+    private void cleanOutputFile() {
+        new OutputHandler(signData).deleteContentOfOutputFile();
+    }
+
+    private void setPaths() {
+        setCertificatePath();
+        setPrivateKeyPath();
+    }
+
+    private void setCertificatePath() {
+        new CertificateHandler(firmaData, signData).setCertificatePath();
+    }
+
+    private void setPrivateKeyPath() {
+        new PrivateKeyHandler(firmaData, signData, signData.getCertificate()).setPrivateKeyPath();
+    }
+
+    private void interfaceDisplay() {
+        updateContentPane();
+        setUpWindow();
+    }
+
+    private void updateContentPane() {
         Container pane = new JPanel();
 
         pane.setLayout(new GridLayout(3, 2));
@@ -66,7 +58,53 @@ public class Firma extends JFrame {
         pane.add(new JLabel("Directorio del Certificado"));
         pane.add(new JLabel(firmaData.getCertificatePath()));
 
-        return pane;
+        setContentPane(pane);
+    }
+
+    private void setUpWindow() {
+        pack();
+        setResizable(false);
+        setVisible(true);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+    }
+
+    private void getFiles() {
+        getCertificate();
+        getPrivateKey();
+    }
+
+    private void getCertificate() {
+        try {
+            new CertificateHandler(firmaData, signData).getCertificate();
+        } catch (FirmaHandler.InvalidCertificate invalidCertificate) {
+            System.out.println("El certificado no ha sido cargado correctamente");
+        }
+    }
+
+    private void getPrivateKey() {
+        String password = JOptionPane.showInputDialog(this, "Introduzca su contraseña de la clave privada", "Contraseña", JOptionPane.PLAIN_MESSAGE);
+
+        try {
+            new PrivateKeyHandler(firmaData, signData, signData.getCertificate()).getPrivateKey(password);
+        } catch (FirmaHandler.InvalidPassword invalidPassword) {
+            System.out.println("La contraseña no es correcta");
+        } catch (FirmaHandler.InvalidCertificate invalidCertificate) {
+            System.out.println("El certificado no corresponde con la clave privada");
+        }
+    }
+
+    private void signAndSave() {
+        signText();
+        saveTextSigned();
+    }
+
+    private void signText() {
+        new Signer(signData).sign();
+    }
+
+    private void saveTextSigned() {
+        new OutputHandler(signData).saveText();
     }
 
     public static void main(String[] args) {

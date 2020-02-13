@@ -1,9 +1,6 @@
 package io.finbook.view;
 
-import io.finbook.controller.CertificateHandler;
-import io.finbook.controller.OutputHandler;
-import io.finbook.controller.PrivateKeyHandler;
-import io.finbook.controller.Signer;
+import io.finbook.controller.*;
 import io.finbook.model.FirmaData;
 import io.finbook.model.SignData;
 
@@ -24,7 +21,7 @@ public class Firma extends JFrame {
         ch.setCertificatePath();
         try {
             ch.getCertificate();
-        } catch (CertificateHandler.InvalidCertificate invalidCertificate) {
+        } catch (FirmaHandler.InvalidCertificate invalidCertificate) {
             System.out.println("Certificado inválido");
             System.out.println(1);
         }
@@ -44,9 +41,9 @@ public class Firma extends JFrame {
 
         try {
             pkh.getPrivateKey(password);
-        } catch (PrivateKeyHandler.InvalidPassword invalidPassword) {
+        } catch (FirmaHandler.InvalidPassword invalidPassword) {
             System.out.println("Contraseña inválida");
-        } catch (PrivateKeyHandler.InvalidCertificate invalidCertificate) {
+        } catch (FirmaHandler.InvalidCertificate invalidCertificate) {
             System.out.println("Certificado inválido");
             System.out.println(2);
         }

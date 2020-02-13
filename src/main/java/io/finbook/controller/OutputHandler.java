@@ -4,7 +4,7 @@ import io.finbook.model.SignData;
 
 import java.io.*;
 
-public class OutputHandler {
+public class OutputHandler extends FirmaHandler {
 
     private final SignData signData;
     private final static String OUTPUT_PATH = "text_signed.txt";
@@ -13,12 +13,6 @@ public class OutputHandler {
     static {
         outputFile = new File(OUTPUT_PATH);
         create(outputFile);
-    }
-
-    private static void create(File file) {
-        try {
-            file.createNewFile();
-        } catch (IOException ignored) {}
     }
 
     public OutputHandler(SignData signData) {

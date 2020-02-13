@@ -12,7 +12,7 @@ import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 
-public class CertificateHandler {
+public class CertificateHandler extends FirmaHandler {
 
     private FirmaData firmaData;
     private SignData signData;
@@ -22,12 +22,6 @@ public class CertificateHandler {
     static {
         certificatePathFile = new File(CERTIFICATE_PATH);
         create(certificatePathFile);
-    }
-
-    private static void create(File file) {
-        try {
-            file.createNewFile();
-        } catch (IOException ignored) {}
     }
 
     public CertificateHandler(FirmaData firmaData, SignData signData) {
@@ -74,6 +68,4 @@ public class CertificateHandler {
             }
         } catch (NoSuchProviderException | CertificateException ignored) {}
     }
-
-    public static class InvalidCertificate extends Exception {}
 }

@@ -9,7 +9,7 @@ import java.security.*;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
-public class PrivateKeyHandler {
+public class PrivateKeyHandler extends FirmaHandler {
 
     private FirmaData firmaData;
     private SignData signData;
@@ -20,12 +20,6 @@ public class PrivateKeyHandler {
     static {
         privateKeyPathFile = new File(PRIVATE_KEY_PATH);
         create(privateKeyPathFile);
-    }
-
-    private static void create(File file) {
-        try {
-            file.createNewFile();
-        } catch (IOException ignored) {}
     }
 
     public PrivateKeyHandler(FirmaData firmaData, SignData signData, X509Certificate certificate) {
@@ -78,7 +72,4 @@ public class PrivateKeyHandler {
             }
         } catch (KeyStoreException | UnrecoverableKeyException | NoSuchAlgorithmException | CertificateException ignored) {}
     }
-
-    public static class InvalidPassword extends Exception {}
-    public static class InvalidCertificate extends Exception {}
 }

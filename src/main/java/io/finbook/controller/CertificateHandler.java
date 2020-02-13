@@ -14,10 +14,11 @@ import java.security.cert.X509Certificate;
 public class CertificateHandler {
 
     private FirmaData firmaData;
-    private static File certificateData;
+    private final static String CERTIFICATE_PATH = "certificate_path.txt";
+    private final static File certificateData;
 
     static {
-        certificateData = new File("certificate_path.txt");
+        certificateData = new File(CERTIFICATE_PATH);
         createFile();
     }
 

@@ -12,10 +12,11 @@ public class PrivateKeyHandler {
 
     private FirmaData firmaData;
     private X509Certificate certificate;
-    private static File privateKeyData;
+    private final static String PRIVATE_KEY_PATH = "private_key_path.txt";
+    private final static File privateKeyData;
 
     static {
-        privateKeyData = new File("private_key_path.txt");
+        privateKeyData = new File(PRIVATE_KEY_PATH);
         createFile();
     }
 

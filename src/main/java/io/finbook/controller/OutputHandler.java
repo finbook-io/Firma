@@ -8,7 +8,7 @@ public class OutputHandler {
 
     private final SignData signData;
     private final static String OUTPUT_PATH = "text_signed.txt";
-    private static File outputData;
+    private final static File outputData;
 
     static {
         outputData = new File(OUTPUT_PATH);

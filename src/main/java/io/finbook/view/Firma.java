@@ -2,7 +2,9 @@ package io.finbook.view;
 
 import io.finbook.controller.CertificateHandler;
 import io.finbook.controller.PrivateKeyHandler;
+import io.finbook.controller.Signer;
 import io.finbook.model.FirmaData;
+import io.finbook.model.SignData;
 
 import javax.swing.*;
 import java.awt.*;
@@ -50,6 +52,10 @@ public class Firma extends JFrame {
             System.out.println("Certificado inválido");
             System.out.println(2);
         }
+
+        SignData signData = new SignData(pk, certificate, textToSign);
+        Signer signer = new Signer(signData);
+        signer.sign();
     }
 
     private Container getPaneBuilded() {

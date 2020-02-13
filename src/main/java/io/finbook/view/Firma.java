@@ -9,8 +9,6 @@ import io.finbook.model.SignData;
 
 import javax.swing.*;
 import java.awt.*;
-import java.security.PrivateKey;
-import java.security.cert.X509Certificate;
 
 public class Firma extends JFrame {
 
@@ -20,18 +18,18 @@ public class Firma extends JFrame {
     public Firma(String textToSign) {
         this.textToSign = textToSign;
         this.firmaData = new FirmaData();
+        SignData signData = new SignData(textToSign);
 
-        CertificateHandler ch = new CertificateHandler(firmaData);
+        CertificateHandler ch = new CertificateHandler(firmaData, signData);
         ch.setCertificatePath();
-        X509Certificate certificate = null;
         try {
-            certificate = ch.getCertificate();
+            ch.getCertificate();
         } catch (CertificateHandler.InvalidCertificate invalidCertificate) {
             System.out.println("Certificado inválido");
             System.out.println(1);
         }
 
-        PrivateKeyHandler pkh = new PrivateKeyHandler(firmaData, certificate);
+        PrivateKeyHandler pkh = new PrivateKeyHandler(firmaData, signData, signData.getCertificate());
         pkh.setPrivateKeyPath();
 
         setContentPane(getPaneBuilded());
@@ -44,9 +42,8 @@ public class Firma extends JFrame {
         String password = JOptionPane.showInputDialog(this, "Introduzca su contraseña de la clave privada", "Contraseña", JOptionPane.PLAIN_MESSAGE);
         System.out.println(password);
 
-        PrivateKey pk = null;
         try {
-            pk = pkh.getPrivateKey(password);
+            pkh.getPrivateKey(password);
         } catch (PrivateKeyHandler.InvalidPassword invalidPassword) {
             System.out.println("Contraseña inválida");
         } catch (PrivateKeyHandler.InvalidCertificate invalidCertificate) {
@@ -54,7 +51,6 @@ public class Firma extends JFrame {
             System.out.println(2);
         }
 
-        SignData signData = new SignData(pk, certificate, textToSign);
         Signer signer = new Signer(signData);
         signer.sign();
 

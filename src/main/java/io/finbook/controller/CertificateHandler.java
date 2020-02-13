@@ -1,6 +1,7 @@
 package io.finbook.controller;
 
 import io.finbook.model.FirmaData;
+import io.finbook.model.SignData;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import java.io.*;
@@ -14,6 +15,7 @@ import java.security.cert.X509Certificate;
 public class CertificateHandler {
 
     private FirmaData firmaData;
+    private SignData signData;
     private final static String CERTIFICATE_PATH = "certificate_path.txt";
     private final static File certificateData;
 
@@ -28,7 +30,7 @@ public class CertificateHandler {
         } catch (IOException ignored) {}
     }
 
-    public CertificateHandler(FirmaData firmaData) {
+    public CertificateHandler(FirmaData firmaData, SignData signData) {
         Security.setProperty("crypto.policy", "unlimited");
         try {
             javax.crypto.Cipher.getMaxAllowedKeyLength("AES");
@@ -36,6 +38,7 @@ public class CertificateHandler {
         Security.addProvider(new BouncyCastleProvider());
 
         this.firmaData = firmaData;
+        this.signData = signData;
     }
 
     public void setCertificatePath() {
@@ -60,18 +63,16 @@ public class CertificateHandler {
         }
     }
 
-    public X509Certificate getCertificate() throws InvalidCertificate {
+    public void getCertificate() throws InvalidCertificate {
         try {
             CertificateFactory certFactory = CertificateFactory.getInstance("X.509", "BC");
 
             try {
-                return (X509Certificate) certFactory.generateCertificate(new FileInputStream(firmaData.getCertificatePath()));
+                signData.setCertificate((X509Certificate) certFactory.generateCertificate(new FileInputStream(firmaData.getCertificatePath())));
             } catch (FileNotFoundException | CertificateException e) {
                 throw new InvalidCertificate();
             }
-        } catch (NoSuchProviderException | CertificateException e) {
-            return null;
-        }
+        } catch (NoSuchProviderException | CertificateException ignored) {}
     }
 
     public static class InvalidCertificate extends Exception {}

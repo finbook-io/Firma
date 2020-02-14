@@ -1,1 +1,1 @@
-C:\Users\raull\IdeaProjects\Firma\resources\Baeldung.p12
+C:\Users\raull\IdeaProjects\Firma\resources\servidor.p12

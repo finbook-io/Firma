@@ -1,1 +1,1 @@
-C:\Users\raull\IdeaProjects\Firma\resources\Baeldung.cer
+C:\Users\raull\IdeaProjects\Firma\resources\servidor.crt

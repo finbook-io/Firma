@@ -15,27 +15,23 @@ public class FirmaSwing extends JFrame implements UserInterface, Firma {
     private String textToSign;
     private FirmaData firmaData;
     private SignData signData;
+    private FileOutputHandler outputHandler;
 
     public FirmaSwing(String textToSign) {
         this.textToSign = textToSign;
         this.firmaData = new FirmaData();
         this.signData = new SignData(textToSign);
+        this.outputHandler = new FileOutputHandler(signData);
     }
 
     @Override
     public void init() {
-        cleanOutputFile();
         setPaths();
         interfaceDisplay();
         getFiles();
         signAndSave();
 
         showMessage("Firma completada", "La firma ha sido completada correctamente", JOptionPane.INFORMATION_MESSAGE);
-    }
-
-    @Override
-    public void cleanOutputFile() {
-        new OutputHandler(signData).deleteContentOfOutputFile();
     }
 
     @Override
@@ -104,8 +100,8 @@ public class FirmaSwing extends JFrame implements UserInterface, Firma {
     }
 
     @Override
-    public void saveTextSigned() {
-        new OutputHandler(signData).saveText();
+    public void returnTextSigned() {
+        outputHandler.returnTextSigned();
     }
 
     @Override

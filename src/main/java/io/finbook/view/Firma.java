@@ -3,13 +3,12 @@ package io.finbook.view;
 public interface Firma {
 
     void init();
-    void cleanOutputFile();
     void setCertificatePath();
     void setPrivateKeyPath();
     void getCertificate();
     void getPrivateKey();
     void signText();
-    void saveTextSigned();
+    void returnTextSigned();
     void showMessage(String title, String message, int messageType);
 
     default void setPaths() {
@@ -24,6 +23,6 @@ public interface Firma {
 
     default void signAndSave() {
         signText();
-        saveTextSigned();
+        returnTextSigned();
     }
 }

@@ -109,16 +109,31 @@ public class FirmaSwing extends JFrame implements UserInterface, Firma {
 
     @Override
     public void getPrivateKey() {
-        String password = JOptionPane.showInputDialog(this, "Introduzca su contraseña de la clave privada", "Contraseña", JOptionPane.PLAIN_MESSAGE);
-
         try {
-            new PrivateKeyHandler(firmaData, signData, signData.getCertificate()).getPrivateKey(password);
+            new PrivateKeyHandler(firmaData, signData, signData.getCertificate()).getPrivateKey(password());
         } catch (FirmaHandler.InvalidPassword invalidPassword) {
             showMessage("Contraseña no válida", "La contraseña introducida no corresponde con la de la clave privada", JOptionPane.ERROR_MESSAGE);
         } catch (FirmaHandler.InvalidCertificate invalidCertificate) {
             showMessage("Certificado no válido", "El certificado no corresponde al asociado con la clave privada", JOptionPane.ERROR_MESSAGE);
         } catch (FileNotFoundException e) {
             showMessage("Clave privada no encontrada", "La clave privada no ha sido encontrada, o no ha sido especificada", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private String password(){
+        JOptionPane optionPane = new JOptionPane();
+        JPasswordField passwordTextField = new JPasswordField("");
+        optionPane.setMessage(new Object[] {"Contraseña: ", passwordTextField});
+        optionPane.setMessageType(JOptionPane.PLAIN_MESSAGE);
+        optionPane.setOptionType(JOptionPane.OK_CANCEL_OPTION);
+        JDialog dialog = optionPane.createDialog(this, "Contraseña de su clave privada");
+        dialog.setVisible(true);
+        String password = String.valueOf(passwordTextField.getPassword());
+        if(!password.equals("")) {
+            return password;
+        } else {
+            System.exit(0);
+            return null;
         }
     }
 

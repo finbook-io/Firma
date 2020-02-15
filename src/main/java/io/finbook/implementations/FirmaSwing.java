@@ -6,9 +6,13 @@ import io.finbook.model.SignData;
 import io.finbook.view.Firma;
 import io.finbook.view.UserInterface;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class FirmaSwing extends JFrame implements UserInterface, Firma {
 
@@ -16,22 +20,25 @@ public class FirmaSwing extends JFrame implements UserInterface, Firma {
     private FirmaData firmaData;
     private SignData signData;
     private FileOutputHandler outputHandler;
+    private boolean mustBeSigned;
 
-    public FirmaSwing(String textToSign) {
+    public FirmaSwing(String textToSign, boolean mustBeSigned) {
         this.textToSign = textToSign;
         this.firmaData = new FirmaData();
         this.signData = new SignData(textToSign);
         this.outputHandler = new FileOutputHandler(signData);
+        this.mustBeSigned = mustBeSigned;
     }
 
     @Override
     public void init() {
         setPaths();
         interfaceDisplay();
-        getFiles();
-        signAndSave();
-
-        showMessage("Firma completada", "La firma ha sido completada correctamente", JOptionPane.INFORMATION_MESSAGE);
+        if(mustBeSigned) {
+            getFiles();
+            signAndSave();
+            showMessage("Firma completada", "La firma ha sido completada correctamente", JOptionPane.INFORMATION_MESSAGE);
+        }
     }
 
     @Override
@@ -47,20 +54,41 @@ public class FirmaSwing extends JFrame implements UserInterface, Firma {
     @Override
     public void updatePanel() {
         Container pane = new JPanel();
+        pane.setLayout(new BoxLayout(pane, BoxLayout.PAGE_AXIS));
 
-        pane.setLayout(new GridLayout(3, 2));
-        pane.add(new JLabel("Texto a firmar"));
-        pane.add(new JLabel(textToSign));
-        pane.add(new JLabel("Directorio de la Clave Privada"));
-        pane.add(new JLabel(firmaData.getPrivateKeyPath()));
-        pane.add(new JLabel("Directorio del Certificado"));
-        pane.add(new JLabel(firmaData.getCertificatePath()));
+        pane.add(firmaLogo());
+        pane.add(dataPane());
 
         setContentPane(pane);
     }
 
+    private Component firmaLogo() {
+        Container imagePane = new JPanel();
+
+        imagePane.add(new FirmaLogo());
+
+        return imagePane;
+    }
+
+    private Component dataPane() {
+        Container dataPane = new JPanel();
+        dataPane.setLayout(new GridLayout(3, 2));
+
+        dataPane.add(new JLabel("Texto a firmar"));
+        dataPane.add(new JLabel(textToSign));
+        dataPane.add(new JLabel("Directorio de la Clave Privada"));
+        dataPane.add(new JLabel(firmaData.getPrivateKeyPath()));
+        dataPane.add(new JLabel("Directorio del Certificado"));
+        dataPane.add(new JLabel(firmaData.getCertificatePath()));
+
+        return dataPane;
+    }
+
     @Override
     public void setUpWindow() {
+        setTitle("FinBook - Firma");
+        setIconImage(Toolkit.getDefaultToolkit().createImage(getClass().getClassLoader().getResource("FinBookFirmaWhite.png")));
+
         pack();
         setResizable(false);
         setVisible(true);
@@ -108,5 +136,25 @@ public class FirmaSwing extends JFrame implements UserInterface, Firma {
     public void showMessage(String title, String message, int messageType) {
         JOptionPane.showMessageDialog(this, message, title, messageType);
         System.exit(0);
+    }
+
+    private class FirmaLogo extends JPanel{
+
+        private BufferedImage image;
+
+        public FirmaLogo() {
+            try {
+                image = ImageIO.read(new File("src/main/resources/FinBookFirma.png"));
+            } catch (IOException ignored) {}
+            this.setMinimumSize(new Dimension(109, 50));
+            this.setPreferredSize(new Dimension(109, 50));
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            g.drawImage(image.getScaledInstance(109, 50, 0), 0, 0, this);
+        }
+
     }
 }

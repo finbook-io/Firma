@@ -5,7 +5,11 @@ import io.finbook.view.Firma;
 
 public class Main {
     public static void main(String[] args) {
-        initFirma(new FirmaSwing("Texto de ejemplo"));
+        if(args.length == 0) {
+            initFirma(new FirmaSwing("", false));
+        } else {
+            initFirma(new FirmaSwing(args[0], true));
+        }
     }
 
     private static void initFirma(Firma firma) {

@@ -13,6 +13,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URL;
 
 public class FirmaSwing extends JFrame implements UserInterface, Firma {
 
@@ -87,7 +88,9 @@ public class FirmaSwing extends JFrame implements UserInterface, Firma {
     @Override
     public void setUpWindow() {
         setTitle("FinBook - Firma");
-        setIconImage(Toolkit.getDefaultToolkit().createImage(getClass().getClassLoader().getResource("FinBookFirmaWhite.png")));
+        try {
+            setIconImage(ImageIO.read(new File("resources/FinBookFirmaWhite.png")));
+        } catch (IOException ignored) {}
 
         pack();
         setResizable(false);
@@ -159,7 +162,7 @@ public class FirmaSwing extends JFrame implements UserInterface, Firma {
 
         public FirmaLogo() {
             try {
-                image = ImageIO.read(new File("src/main/resources/FinBookFirma.png"));
+                image = ImageIO.read(new File("resources/FinBookFirma.png"));
             } catch (IOException ignored) {}
             this.setMinimumSize(new Dimension(109, 50));
             this.setPreferredSize(new Dimension(109, 50));

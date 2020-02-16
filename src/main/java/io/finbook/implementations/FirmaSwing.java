@@ -168,7 +168,9 @@ public class FirmaSwing extends JFrame implements UserInterface, Firma {
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
-            g.drawImage(image.getScaledInstance(109, 50, 0), 0, 0, this);
+            if(image != null) {
+                g.drawImage(image.getScaledInstance(109, 50, 0), 0, 0, this);
+            }
         }
 
     }

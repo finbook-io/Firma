@@ -6,7 +6,7 @@ import io.finbook.view.Firma;
 public class Main {
     public static void main(String[] args) {
         if(args.length == 0) {
-            initFirma(new FirmaSwing("pepito", true));
+            initFirma(new FirmaSwing("", false));
         } else {
             initFirma(new FirmaSwing(args[0], true));
         }

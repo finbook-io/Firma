@@ -91,7 +91,6 @@ public class FirmaSwing extends JFrame implements UserInterface, Firma {
         try {
             setIconImage(ImageIO.read(new File("resources/FinBookFirmaWhite.png")));
         } catch (IOException ignored) {}
-
         pack();
         setResizable(false);
         setVisible(true);

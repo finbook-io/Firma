@@ -7,12 +7,7 @@ public class FirmaData {
 
     public FirmaData() {
     }
-
-    public FirmaData(String privateKeyPath, String certificatePath) {
-        this.privateKeyPath = privateKeyPath;
-        this.certificatePath = certificatePath;
-    }
-
+    
     public String getPrivateKeyPath() {
         return privateKeyPath;
     }

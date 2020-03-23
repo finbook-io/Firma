@@ -1,4 +1,4 @@
-package io.finbook.controller;
+package io.finbook.controller.resourceshandler;
 
 import java.io.File;
 import java.io.IOException;

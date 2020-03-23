@@ -1,4 +1,4 @@
-package io.finbook.controller;
+package io.finbook.controller.resourceshandler;
 
 import io.finbook.model.FirmaData;
 import io.finbook.model.SignData;

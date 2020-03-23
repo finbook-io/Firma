@@ -1,6 +1,12 @@
-package io.finbook.implementations;
+package io.finbook.view.implementations;
 
 import io.finbook.controller.*;
+import io.finbook.controller.output.OutputHandler;
+import io.finbook.controller.output.WebSocketOutputHandler;
+import io.finbook.controller.resourceshandler.CertificateHandler;
+import io.finbook.controller.resourceshandler.FirmaHandler;
+import io.finbook.controller.resourceshandler.PrivateKeyHandler;
+import io.finbook.controller.output.FileOutputHandler;
 import io.finbook.model.FirmaData;
 import io.finbook.model.SignData;
 import io.finbook.view.Firma;
@@ -13,21 +19,20 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URL;
 
 public class FirmaSwing extends JFrame implements UserInterface, Firma {
 
     private String textToSign;
     private FirmaData firmaData;
     private SignData signData;
-    private FileOutputHandler outputHandler;
+    private OutputHandler outputHandler;
     private boolean mustBeSigned;
 
-    public FirmaSwing(String textToSign, boolean mustBeSigned) {
+    public FirmaSwing(String textToSign, boolean mustBeSigned, String webSocketUri) {
         this.textToSign = textToSign;
         this.firmaData = new FirmaData();
         this.signData = new SignData(textToSign);
-        this.outputHandler = new FileOutputHandler(signData);
+        this.outputHandler = new WebSocketOutputHandler(webSocketUri, signData);
         this.mustBeSigned = mustBeSigned;
     }
 

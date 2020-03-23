@@ -1,7 +1,7 @@
-package io.finbook.implementations;
+package io.finbook.controller.output;
 
-import io.finbook.controller.FirmaHandler;
-import io.finbook.controller.OutputHandler;
+import io.finbook.controller.resourceshandler.FirmaHandler;
+import io.finbook.controller.output.OutputHandler;
 import io.finbook.model.SignData;
 
 import java.io.*;

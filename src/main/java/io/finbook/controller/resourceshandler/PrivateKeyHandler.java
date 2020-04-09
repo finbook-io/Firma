@@ -14,11 +14,11 @@ public class PrivateKeyHandler extends FirmaHandler {
     private FirmaData firmaData;
     private SignData signData;
     private X509Certificate certificate;
-    private final static String PRIVATE_KEY_PATH = "private_key_path.txt";
+    private final static String PRIVATE_KEY_PATH = "/private_key_path.txt";
     private final static File privateKeyPathFile;
 
     static {
-        privateKeyPathFile = new File(PRIVATE_KEY_PATH);
+        privateKeyPathFile = new File(FirmaHandler.getProjectPath() + PRIVATE_KEY_PATH);
         create(privateKeyPathFile);
     }
 

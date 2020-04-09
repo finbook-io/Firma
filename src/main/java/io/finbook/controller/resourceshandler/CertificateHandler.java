@@ -16,11 +16,11 @@ public class CertificateHandler extends FirmaHandler {
 
     private FirmaData firmaData;
     private SignData signData;
-    private final static String CERTIFICATE_PATH = "certificate_path.txt";
+    private final static String CERTIFICATE_PATH = "/certificate_path.txt";
     private final static File certificatePathFile;
 
     static {
-        certificatePathFile = new File(CERTIFICATE_PATH);
+        certificatePathFile = new File(FirmaHandler.getProjectPath() + CERTIFICATE_PATH);
         create(certificatePathFile);
     }
 

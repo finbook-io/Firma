@@ -17,9 +17,9 @@ public class MessageConstructor {
     private static String getJsonElementsBy(byte[] elements) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < elements.length - 1; i++) {
-            sb.append("\"").append(elements[i]).append("\",");
+            sb.append(elements[i]).append(",");
         }
-        sb.append("\"").append(elements[elements.length - 1]).append("\"");
+        sb.append(elements[elements.length - 1]);
         return sb.toString();
     }
 }

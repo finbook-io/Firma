@@ -7,6 +7,10 @@ public class Main {
 
     public static void main(String[] args) {
 
+        if (args.length == 1){
+            args = args[0].split("%20");
+        }
+
         if(args.length == 0) {
             initFirma(new FirmaSwing("", false, ""));
         } else {

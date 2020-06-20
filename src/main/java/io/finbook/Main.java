@@ -9,11 +9,6 @@ public class Main {
 
         if (args.length == 1){
             args = args[0].split("%20");
-        }
-
-        if(args.length == 0) {
-            initFirma(new FirmaSwing("", false, ""));
-        } else {
             initFirma(new FirmaSwing(args[0], true, args[1]));
         }
     }

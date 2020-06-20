@@ -6,7 +6,6 @@ import io.finbook.controller.output.WebSocketOutputHandler;
 import io.finbook.controller.resourceshandler.CertificateHandler;
 import io.finbook.controller.resourceshandler.FirmaHandler;
 import io.finbook.controller.resourceshandler.PrivateKeyHandler;
-import io.finbook.controller.output.FileOutputHandler;
 import io.finbook.model.FirmaData;
 import io.finbook.model.SignData;
 import io.finbook.view.Firma;
@@ -160,7 +159,7 @@ public class FirmaSwing extends JFrame implements UserInterface, Firma {
         System.exit(0);
     }
 
-    private class FirmaLogo extends JPanel{
+    private static class FirmaLogo extends JPanel{
 
         private BufferedImage image;
 

@@ -4,9 +4,6 @@ public class FirmaData {
 
     private String privateKeyPath;
     private String certificatePath;
-
-    public FirmaData() {
-    }
     
     public String getPrivateKeyPath() {
         return privateKeyPath;

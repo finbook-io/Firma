@@ -1,7 +1,6 @@
 package io.finbook.controller.websocket;
 
-import io.finbook.controller.MessageConstructor;
-import io.finbook.controller.output.WebSocketOutputHandler;
+import io.finbook.controller.MessageBuilder;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 
 import java.util.concurrent.CountDownLatch;
@@ -44,8 +43,7 @@ public class ClientSocket {
         this.session = session;
 
         try {
-            Future<Void> fut;
-            fut = session.getRemote().sendStringByFuture(MessageConstructor.toJSON(textToSign, textSigned));
+            Future<Void> fut = session.getRemote().sendStringByFuture(MessageBuilder.toJSON(textToSign, textSigned));
             fut.get(2, TimeUnit.SECONDS);
         } catch (Throwable t) {
             t.printStackTrace();

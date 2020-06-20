@@ -14,8 +14,6 @@ import java.security.cert.X509Certificate;
 
 public class CertificateHandler extends FirmaHandler {
 
-    private FirmaData firmaData;
-    private SignData signData;
     private final static String CERTIFICATE_PATH = "/certificate_path.txt";
     private final static File certificatePathFile;
 
@@ -25,6 +23,8 @@ public class CertificateHandler extends FirmaHandler {
     }
 
     public CertificateHandler(FirmaData firmaData, SignData signData) {
+        super(firmaData, signData);
+
         Security.setProperty("crypto.policy", "unlimited");
         try {
             javax.crypto.Cipher.getMaxAllowedKeyLength("AES");
@@ -32,9 +32,6 @@ public class CertificateHandler extends FirmaHandler {
             ignored.printStackTrace();
         }
         Security.addProvider(new BouncyCastleProvider());
-
-        this.firmaData = firmaData;
-        this.signData = signData;
     }
 
     public void setCertificatePath() {

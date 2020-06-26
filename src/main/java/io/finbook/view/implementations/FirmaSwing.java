@@ -77,14 +77,22 @@ public class FirmaSwing extends JFrame implements UserInterface, Firma {
 
     private Component dataPane() {
         Container dataPane = new JPanel();
-        dataPane.setLayout(new GridLayout(3, 2));
+        //dataPane.setLayout(new CardLayout());
 
-        dataPane.add(new JLabel("Texto a firmar"));
-        dataPane.add(new JLabel(textToSign));
-        dataPane.add(new JLabel("Directorio de la Clave Privada"));
-        dataPane.add(new JLabel(firmaData.getPrivateKeyPath()));
-        dataPane.add(new JLabel("Directorio del Certificado"));
-        dataPane.add(new JLabel(firmaData.getCertificatePath()));
+        Container labelPane = new JPanel();
+        labelPane.setLayout(new GridLayout(3, 1));
+        Container infoPane = new JPanel();
+        infoPane.setLayout(new GridLayout(3, 1));
+
+        dataPane.add(labelPane, BorderLayout.LINE_START);
+        dataPane.add(infoPane, BorderLayout.LINE_END);
+
+        labelPane.add(new JLabel("Texto a firmar:"));
+        infoPane.add(new JLabel(textToSign));
+        labelPane.add(new JLabel("Directorio de la Clave Privada:"));
+        infoPane.add(new JLabel(firmaData.getPrivateKeyPath()));
+        labelPane.add(new JLabel("Directorio del Certificado:"));
+        infoPane.add(new JLabel(firmaData.getCertificatePath()));
 
         return dataPane;
     }

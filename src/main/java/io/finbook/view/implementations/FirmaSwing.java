@@ -18,6 +18,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Arrays;
 
 public class FirmaSwing extends JFrame implements UserInterface, Firma {
 
@@ -77,7 +78,6 @@ public class FirmaSwing extends JFrame implements UserInterface, Firma {
 
     private Component dataPane() {
         Container dataPane = new JPanel();
-        //dataPane.setLayout(new CardLayout());
 
         Container labelPane = new JPanel();
         labelPane.setLayout(new GridLayout(3, 1));
